@@ -1,0 +1,6 @@
+{
+  "name": "Space Warrior",
+  "description": "A complete modern 2D space shooter video game with arcade combat, weapon upgrades, boss battles, responsive mobile controls, and global leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

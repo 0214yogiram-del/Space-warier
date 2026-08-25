@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient (Continuous background required for maskable) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050711" />
+      <stop offset="50%" stop-color="#0b112c" />
+      <stop offset="100%" stop-color="#050711" />
+    </linearGradient>
+    
+    <!-- Neon Cyan Glow -->
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Neon Pink Glow -->
+    <filter id="pinkGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    
+    <!-- Ship Body Gradient -->
+    <linearGradient id="shipGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Energy Field Ring Gradient -->
+    <radialGradient id="ringGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0" />
+      <stop offset="75%" stop-color="#00f0ff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.8" />
+    </radialGradient>
+  </defs>
+
+  <!-- Solid/Gradient Background (Ensuring no white corners or transparent edges under custom masks) -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)" />
+  
+  <!-- Centered and scaled group to sit perfectly inside the 60% safe zone for PWA maskable compliance -->
+  <g transform="translate(256, 256) scale(0.65) translate(-256, -256)">
+    <!-- Outer Tech Grid Lines -->
+    <g stroke="#1e293b" stroke-width="2" opacity="0.45">
+      <line x1="64" y1="0" x2="64" y2="512" />
+      <line x1="128" y1="0" x2="128" y2="512" />
+      <line x1="192" y1="0" x2="192" y2="512" />
+      <line x1="256" y1="0" x2="256" y2="512" />
+      <line x1="320" y1="0" x2="320" y2="512" />
+      <line x1="384" y1="0" x2="384" y2="512" />
+      <line x1="448" y1="0" x2="448" y2="512" />
+      
+      <line x1="0" y1="64" x2="512" y2="64" />
+      <line x1="0" y1="128" x2="512" y2="128" />
+      <line x1="0" y1="192" x2="512" y2="192" />
+      <line x1="0" y1="256" x2="512" y2="256" />
+      <line x1="0" y1="320" x2="512" y2="320" />
+      <line x1="0" y1="384" x2="512" y2="384" />
+      <line x1="0" y1="448" x2="512" y2="448" />
+    </g>
+
+    <!-- Circular Shield Ring -->
+    <circle cx="256" cy="256" r="180" fill="url(#ringGrad)" stroke="#00f0ff" stroke-width="3" filter="url(#cyanGlow)" />
+
+    <!-- Thruster Fire Glow (Neon Pink/Red) -->
+    <path d="M 236 410 L 256 470 L 276 410 Z" fill="#ff2e63" filter="url(#pinkGlow)" opacity="0.95" />
+    <path d="M 244 410 L 256 450 L 268 410 Z" fill="#ffaa00" filter="url(#pinkGlow)" />
+
+    <!-- Starship Wings and Hull -->
+    <path d="M 256 96 L 368 272 L 480 400 L 384 416 L 304 384 L 288 440 L 224 440 L 208 384 L 128 416 L 32 400 L 144 272 Z" 
+          fill="url(#shipGrad)" stroke="#00f0ff" stroke-width="6" stroke-linejoin="round" filter="url(#cyanGlow)" />
+
+    <!-- Neon Wing Accent Plates -->
+    <path d="M 256 192 L 336 336 L 256 288 L 176 336 Z" fill="#00f0ff" opacity="0.85" filter="url(#cyanGlow)" />
+
+    <!-- Cockpit Glowing Pod -->
+    <ellipse cx="256" cy="240" rx="24" ry="48" fill="#ffffff" filter="url(#cyanGlow)" />
+    <ellipse cx="256" cy="240" rx="14" ry="32" fill="#00ffff" />
+  </g>
+</svg>

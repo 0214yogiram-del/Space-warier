@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['userId', 'displayName', 'highScore', 'coins', 'level']) &&
+        data.userId is string && data.userId.size() <= 128 &&
+        data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 50 &&
+        data.highScore is number && data.highScore >= 0 &&
+        data.coins is number && data.coins >= 0 &&
+        data.level is number && data.level >= 1;
+    }
+
+    function isValidLeaderboardEntry(data) {
+      return data.keys().hasAll(['userId', 'displayName', 'score', 'level']) &&
+        data.userId is string && data.userId.size() <= 128 &&
+        data.displayName is string && data.displayName.size() > 0 && data.displayName.size() <= 50 &&
+        data.score is number && data.score >= 0 &&
+        data.level is number && data.level >= 1;
+    }
+
+    // Users Collection - Secure per-user profile
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+      allow list: if false; // Disallow querying all user PII
+      allow create: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+        isValidUser(incoming()) && incoming().userId == userId;
+      allow update: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+        isValidUser(incoming()) && incoming().userId == userId &&
+        (!('createdAt' in existing()) || !('createdAt' in incoming()) || incoming().createdAt == existing().createdAt);
+      allow delete: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+    }
+
+    // Global Leaderboard Collection - Public read, user-scoped write
+    match /leaderboard/{userId} {
+      allow read: if isValidId(userId);
+      allow create: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+        isValidLeaderboardEntry(incoming()) && incoming().userId == userId;
+      allow update: if isSignedIn() && isValidId(userId) && request.auth.uid == userId &&
+        isValidLeaderboardEntry(incoming()) && incoming().userId == userId;
+      allow delete: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+    }
+  }
+}

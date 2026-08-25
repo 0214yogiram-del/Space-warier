@@ -1,0 +1,40 @@
+{
+  "name": "Space Warrior: 2D Arcade Shooter",
+  "short_name": "Space Warrior",
+  "description": "Defeat waves of alien invaders in this modern 2D arcade space shooter. Upgrade weapons, engage massive multi-phase bosses, and rise up the global leaderboard.",
+  "start_url": "/",
+  "id": "/?pwa=true",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050711",
+  "theme_color": "#050711",
+  "categories": ["games", "arcade", "action"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Launch Game",
+      "short_name": "Play",
+      "description": "Launch the combat simulation directly",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

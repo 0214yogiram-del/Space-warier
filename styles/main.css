@@ -1,0 +1,173 @@
+/* Space Warrior - Sophisticated Dark Sci-Fi Theme */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+:root {
+  --neon: #00F2FF;
+  --accent: #FF2E63;
+  --bg-dark: #05070A;
+  --glass: rgba(10, 15, 25, 0.75);
+  --glass-border: rgba(0, 242, 255, 0.2);
+  --glass-glow: 0 0 25px rgba(0, 242, 255, 0.15);
+  --selection: rgba(0, 242, 255, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+::selection {
+  background: var(--selection);
+  color: #ffffff;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #E0E0E0;
+  touch-action: manipulation;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.font-rajdhani {
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace, ui-monospace;
+}
+
+/* Background Atmosphere Patterns */
+.starfield-bg {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.scanline-overlay {
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Glowing Typography */
+.glow-text {
+  text-shadow: 0 0 10px var(--neon), 0 0 20px rgba(0, 242, 255, 0.5);
+}
+
+.glow-text-accent {
+  text-shadow: 0 0 10px var(--accent), 0 0 20px rgba(255, 46, 99, 0.5);
+}
+
+/* Sophisticated Dark Glass Panels */
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+}
+
+.glass-panel-accent {
+  background: rgba(18, 10, 20, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 46, 99, 0.3);
+  box-shadow: 0 0 25px rgba(255, 46, 99, 0.15);
+}
+
+/* Sophisticated Action Buttons */
+.sophisticated-btn-primary {
+  background: #00F2FF;
+  color: #05070A;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.45);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.sophisticated-btn-primary:hover {
+  background: #33f5ff;
+  box-shadow: 0 0 35px rgba(0, 242, 255, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.sophisticated-btn-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.sophisticated-btn-outline {
+  background: rgba(0, 242, 255, 0.05);
+  border: 1px solid rgba(0, 242, 255, 0.4);
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.sophisticated-btn-outline:hover {
+  background: rgba(0, 242, 255, 0.15);
+  border-color: #00F2FF;
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+}
+
+.sophisticated-btn-accent {
+  background: rgba(255, 46, 99, 0.1);
+  border: 1px solid rgba(255, 46, 99, 0.5);
+  color: #FF2E63;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(255, 46, 99, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.sophisticated-btn-accent:hover {
+  background: rgba(255, 46, 99, 0.25);
+  border-color: #FF2E63;
+  box-shadow: 0 0 25px rgba(255, 46, 99, 0.5);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(5, 7, 10, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 255, 0.3);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 255, 0.7);
+}
+
+/* Canvas Container */
+#game-container canvas {
+  touch-action: none !important;
+  display: block;
+  margin: 0 auto;
+  outline: none;
+}
+

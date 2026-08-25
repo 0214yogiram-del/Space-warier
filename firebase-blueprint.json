@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with persistent game progress",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth user ID"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Player display name"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Player email"
+        },
+        "highScore": {
+          "type": "number",
+          "description": "All time high score"
+        },
+        "coins": {
+          "type": "number",
+          "description": "Collected currency"
+        },
+        "level": {
+          "type": "number",
+          "description": "Highest level reached"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["userId", "displayName", "highScore", "coins", "level"]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Global leaderboard score entry",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Player Auth UID"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Player name displayed on leaderboard"
+        },
+        "score": {
+          "type": "number",
+          "description": "Player high score"
+        },
+        "level": {
+          "type": "number",
+          "description": "Level reached"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when record was posted"
+        }
+      },
+      "required": ["userId", "displayName", "score", "level"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profile and personal game stats"
+    },
+    "/leaderboard/{userId}": {
+      "schema": "LeaderboardEntry",
+      "description": "Global leaderboard score listings"
+    }
+  }
+}
