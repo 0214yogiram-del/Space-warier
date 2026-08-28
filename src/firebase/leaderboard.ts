@@ -46,6 +46,14 @@ export const saveLocalLeaderboard = (entries: LeaderboardEntry[]) => {
   } catch {}
 };
 
+// Helper to safely execute Firestore calls with fallback timeout
+const withTimeout = <T>(promise: Promise<T>, timeoutMs: number = 3000): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Firestore operation timed out')), timeoutMs))
+  ]);
+};
+
 export const submitScoreToLeaderboard = async (score: number, level: number, earnedCoins: number): Promise<boolean> => {
   const user = authState.currentUser;
   
@@ -58,7 +66,7 @@ export const submitScoreToLeaderboard = async (score: number, level: number, ear
     user.level = level;
   }
   user.updatedAt = new Date().toISOString();
-  await syncUserToFirestore(user);
+  syncUserToFirestore(user).catch(() => {});
 
   // Update local leaderboard
   const list = getLocalLeaderboard();
@@ -83,10 +91,10 @@ export const submitScoreToLeaderboard = async (score: number, level: number, ear
   if (db) {
     try {
       const leaderRef = doc(db, 'leaderboard', user.userId);
-      await setDoc(leaderRef, entry, { merge: true });
+      await withTimeout(setDoc(leaderRef, entry, { merge: true }), 3000);
       return true;
     } catch (e) {
-      console.warn('Leaderboard cloud sync skipped:', e);
+      // Graceful offline fallback
     }
   }
   return true;
@@ -100,14 +108,14 @@ export const fetchLeaderboard = async (limitCount: number = 20): Promise<Leaderb
         orderBy('score', 'desc'),
         limit(limitCount)
       );
-      const snap = await getDocs(q);
-      if (!snap.empty) {
+      const snap = await withTimeout(getDocs(q), 2500);
+      if (snap && !snap.empty) {
         const cloudEntries = snap.docs.map(d => d.data() as LeaderboardEntry);
         saveLocalLeaderboard(cloudEntries);
         return cloudEntries;
       }
     } catch (e) {
-      console.warn('Leaderboard cloud fetch fallback to local:', e);
+      // Fallback seamlessly to local archives
     }
   }
   return getLocalLeaderboard().slice(0, limitCount);

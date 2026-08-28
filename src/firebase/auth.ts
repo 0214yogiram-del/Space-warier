@@ -72,6 +72,14 @@ export const subscribeAuth = (cb: (user: GameUser) => void) => {
   };
 };
 
+// Helper to safely execute Firestore calls with fallback timeout
+const withTimeout = <T>(promise: Promise<T>, timeoutMs: number = 3000): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error('Firestore operation timed out')), timeoutMs))
+  ]);
+};
+
 // Initialize Firebase Auth Listener
 if (auth) {
   onAuthStateChanged(auth, async (fbUser) => {
@@ -81,12 +89,12 @@ if (auth) {
       let cloudProfile: Partial<GameUser> = {};
       if (db) {
         try {
-          const userDoc = await getDoc(doc(db, 'users', fbUser.uid));
-          if (userDoc.exists()) {
+          const userDoc = await withTimeout(getDoc(doc(db, 'users', fbUser.uid)), 2500);
+          if (userDoc && userDoc.exists()) {
             cloudProfile = userDoc.data() as Partial<GameUser>;
           }
         } catch (e) {
-          console.warn('Could not fetch cloud profile:', e);
+          console.log('[Auth] Operating in local/offline profile mode');
         }
       }
 
@@ -105,7 +113,7 @@ if (auth) {
 
       authState.currentUser = updated;
       saveLocalUser(updated);
-      await syncUserToFirestore(updated);
+      syncUserToFirestore(updated).catch(() => {});
       notifyAuthListeners();
     }
   });
@@ -116,7 +124,7 @@ export const syncUserToFirestore = async (user: GameUser): Promise<void> => {
   if (!db || !auth || !auth.currentUser) return;
   try {
     const userRef = doc(db, 'users', user.userId);
-    await setDoc(userRef, {
+    await withTimeout(setDoc(userRef, {
       userId: user.userId,
       displayName: user.displayName,
       email: user.email || '',
@@ -125,9 +133,9 @@ export const syncUserToFirestore = async (user: GameUser): Promise<void> => {
       level: user.level,
       updatedAt: new Date().toISOString(),
       createdAt: user.createdAt,
-    }, { merge: true });
+    }, { merge: true }), 3000);
   } catch (err) {
-    console.warn('Error syncing user profile to Firestore:', err);
+    // Graceful offline fallback
   }
 };
 
